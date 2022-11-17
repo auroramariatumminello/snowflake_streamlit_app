@@ -11,7 +11,7 @@ my_fruit_list.set_index('Fruit', inplace=True)
 
 # Information about the fruit
 fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon").json()
-
+fruityvice_advice = pd.DataFrame(fruityvice_response)
 
 
 # STREAMLIT STRUCTURE
@@ -25,9 +25,11 @@ streamlit.text('🥑🍞 Avocado Toast')
 # Section 2
 streamlit.header('🍌🥭 Build Your Own Fruit Smoothie 🥝🍇')
 selection = streamlit.multiselect("Pick some fruits:", list(my_fruit_list.index), ['Avocado', 'Strawberries'])
+selection = list(my_fruit_list.index) if len(selection)==0 else selection
 streamlit.dataframe(my_fruit_list.loc[selection])
 
 # Section 3
 streamlit.header('Fruityvice Fruit Advice')
-streamlit.text(fruityvice_response)
+streamlit.dataframe(fruityvice_advice)
+
 # streamlit.dataframe(pd.read_json("https://fruityvice.com/api/fruit/watermelon"))
