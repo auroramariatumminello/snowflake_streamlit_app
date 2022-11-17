@@ -12,7 +12,6 @@ my_fruit_list.set_index('Fruit', inplace=True)
 
 # STREAMLIT STRUCTURE
 # Section 1
-streamlit.text(response_adding.content)
 streamlit.header('Breakfast Menu')
 streamlit.text('🥣 Omega 3 & Blueberry Oatmeal')
 streamlit.text('🥗 Kale, Spinach & Rocket Smoothie')
