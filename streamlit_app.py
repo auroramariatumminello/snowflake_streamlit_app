@@ -31,7 +31,6 @@ fruit_selection = streamlit.multiselect("Choose your fruits", list(my_fruit_list
 
 # Information about the fruit
 fruityvice_response = [requests.get("https://fruityvice.com/api/fruit/"+fruit.lower()).json() for fruit in fruit_selection]
-fruityvice_advice = pd.DataFrame.from_records(fruityvice_response)
-fruityvice_advice[["carbohydrates", "protein", "fat", "calories", "sugar"]] = fruityvice_advice['nutritions'].values.tolist()
+fruityvice_advice = pd.json_normalize(fruityvice_response)
 streamlit.dataframe(fruityvice_advice)
 
