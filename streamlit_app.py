@@ -5,6 +5,20 @@ import requests
 import snowflake.connector
 from urllib.error import URLError
 
+# SNOWFLAKE CONNECTION SETTINGS
+my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+my_cur = my_cnx.cursor()
+
+
+def get_fruityvice_fruit(names):
+    fruityvice_response = [requests.get("https://fruityvice.com/api/fruit/"+fruit.lower()).json() for fruit in names]
+    fruityvice_advice = pd.json_normalize(fruityvice_response)
+    return fruityvice_advice
+
+def get_fruits_list():
+    with my_cnx.cursor() as my_cur():
+        my_cur.execute("select * from fruit_load_list")
+        return my_cur.fetchall()
 
 # DATASETS
 # List of fruits
@@ -26,24 +40,13 @@ selection = list(my_fruit_list.index) if len(selection)==0 else selection
 streamlit.dataframe(my_fruit_list.loc[selection])
 
 # Section 3
-# streamlit.header('Fruityvice Fruit Advice')
-# fruit_selection = streamlit.multiselect("Choose your fruits", list(my_fruit_list.index), ['Watermelon', 'Banana'])
-# fruit_selection = list(my_fruit_list.index) if len(fruit_selection)==0 else selection
+streamlit.header('Fruityvice Fruit Advice')
+fruit_selection = streamlit.multiselect("Choose your fruits", list(my_fruit_list.index), ['Watermelon', 'Banana'])
 
-# # Information about the fruit
-# fruityvice_response = [requests.get("https://fruityvice.com/api/fruit/"+fruit.lower()).json() for fruit in fruit_selection]
-# fruityvice_advice = pd.json_normalize(fruityvice_response)
-# streamlit.dataframe(fruityvice_advice)
+# Information about the fruit
+streamlit.dataframe(get_fruityvice_fruit(fruit_selection))
 
-# Connection with Snowflake
-my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-my_cur = my_cnx.cursor()
-my_cur.execute("SELECT * FROM FRUIT_LOAD_LIST")
-my_data_row = my_cur.fetchone()
-
-fruit_selection = streamlit.text_input("Insert your favourite fruit: ")
-streamlit.dataframe(my_data_row)
-
-my.cur.execute("INSERT INTO FRUIT_LOAD_LIST VALUES ("+fruit_selection+")")
-
-streamlit.stop()
+# SECTION 4
+if streamlit.button('Get fruit load list'):
+    data_rows = get_fruits_list()
+    streamlit.dataframe(data_rows)
