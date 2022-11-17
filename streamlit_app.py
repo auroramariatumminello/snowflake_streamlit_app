@@ -10,23 +10,6 @@ import snowflake.connector
 my_fruit_list = pd.read_csv("fruit_macros.txt")
 my_fruit_list.set_index('Fruit', inplace=True)
 
-# Add fruit "PEACH"
-peach = """{
-    "genus": "Prunus",
-    "name": "Peach",
-    "family": "Rosaceae",
-    "order": "Rosales",
-    "nutritions": {
-        "carbohydrates": 15,
-        "protein": 1,
-        "fat": 0.5,
-        "calories": 50,
-        "sugar": 13
-    }
-}
-"""
-response_adding = requests.put("https://fruityvice.com/api/fruit/", data=peach)
-
 # STREAMLIT STRUCTURE
 # Section 1
 streamlit.text(response_adding.content)
@@ -52,4 +35,10 @@ fruityvice_response = [requests.get("https://fruityvice.com/api/fruit/"+fruit.lo
 fruityvice_advice = pd.json_normalize(fruityvice_response)
 streamlit.dataframe(fruityvice_advice)
 
-
+# Connection with Snowflake
+my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+my_cur = my_cnx.cursor()
+my_cur.execute("SELECT CURRENT_USER(), CURRENT_ACCOUNT(), CURRENT_REGION()")
+my_data_row = my_cur.fetchone()
+streamlit.text("Hello from Snowflake:")
+streamlit.text(my_data_row)
