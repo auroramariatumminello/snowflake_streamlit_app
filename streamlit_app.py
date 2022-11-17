@@ -6,7 +6,7 @@ import requests
 
 # DATASETS
 # List of fruits
-my_fruit_list = pd.read_csv("https://raw.githubusercontent.com/auroramariatumminello/snowflake_streamlit_app/main/fruit_macros.txt")
+my_fruit_list = pd.read_csv("fruit_macros.txt")
 my_fruit_list.set_index('Fruit', inplace=True)
 
 
@@ -21,7 +21,7 @@ streamlit.text('🥑🍞 Avocado Toast')
 
 # Section 2
 streamlit.header('🍌🥭 Build Your Own Fruit Smoothie 🥝🍇')
-selection = streamlit.multiselect("Pick some fruits:", list(my_fruit_list.index), ['Avocado', 'Strawberries'])
+selection = streamlit.multiselect("Pick some fruits:", list(my_fruit_list.index), ['Avocado', 'Strawberry'])
 selection = list(my_fruit_list.index) if len(selection)==0 else selection
 streamlit.dataframe(my_fruit_list.loc[selection])
 
