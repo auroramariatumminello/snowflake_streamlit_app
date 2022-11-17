@@ -6,7 +6,7 @@ import requests
 
 # DATASETS
 # List of fruits
-my_fruit_list = pd.read_csv("https://uni-lab-files.s3.us-west-2.amazonaws.com/dabw/fruit_macros.txt")
+my_fruit_list = pd.read_csv("https://raw.githubusercontent.com/auroramariatumminello/snowflake_streamlit_app/main/fruit_macros.txt")
 my_fruit_list.set_index('Fruit', inplace=True)
 
 
@@ -32,5 +32,6 @@ fruit_selection = streamlit.multiselect("Choose your fruits", list(my_fruit_list
 # Information about the fruit
 fruityvice_response = [requests.get("https://fruityvice.com/api/fruit/"+fruit.lower()).json() for fruit in fruit_selection]
 fruityvice_advice = pd.DataFrame.from_records(fruityvice_response)
+fruityvice_advice[["carbohydrates", "protein", "fat", "calories", "sugar"]] = fruityvice_advice['nutritions'].values.tolist()
 streamlit.dataframe(fruityvice_advice)
 
