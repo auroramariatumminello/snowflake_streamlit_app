@@ -16,9 +16,14 @@ def get_fruityvice_fruit(names):
     return fruityvice_advice
 
 def get_fruits_list():
-    with my_cnx.cursor() as my_cur():
+    with my_cnx.cursor() as my_cur:
         my_cur.execute("select * from fruit_load_list")
         return my_cur.fetchall()
+
+def insert_row_snowflake(new_fruit):
+    with my_cnx.cursor() as my_cur:
+        my_cur.execute("INSERT INTO FRUIT_LOAD_LIST VALUES ("+new_fruit+")")
+        return "New fruit added."
 
 # DATASETS
 # List of fruits
@@ -50,3 +55,7 @@ streamlit.dataframe(get_fruityvice_fruit(fruit_selection))
 if streamlit.button('Get fruit load list'):
     data_rows = get_fruits_list()
     streamlit.dataframe(data_rows)
+
+add_fruit = streamlit.text_input("Add fruit:")
+if streamlit.button("Add fruit to the list"):
+    streamlit.text(insert_row_snowflake(add_fruit))
