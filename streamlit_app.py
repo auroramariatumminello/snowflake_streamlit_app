@@ -1,10 +1,17 @@
 # LIBRARIES
 import streamlit
 import pandas
+import requests
+
 
 # DATASETS
+# List of fruits
 my_fruit_list = pandas.read_csv("https://uni-lab-files.s3.us-west-2.amazonaws.com/dabw/fruit_macros.txt")
 my_fruit_list.set_index('Fruit', inplace=True)
+
+# Information about the fruit
+fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon")
+
 
 # STREAMLIT STRUCTURE
 # Section 1
@@ -18,3 +25,7 @@ streamlit.text('🥑🍞 Avocado Toast')
 streamlit.header('🍌🥭 Build Your Own Fruit Smoothie 🥝🍇')
 selection = streamlit.multiselect("Pick some fruits:", list(my_fruit_list.index), ['Avocado', 'Strawberries'])
 streamlit.dataframe(my_fruit_list.loc[selection])
+
+# Section 3
+streamlit.header('Fruityvice Fruit Advice')
+streamlit.dataframe(pd.DataFrame(fruityvice_response.json()))
