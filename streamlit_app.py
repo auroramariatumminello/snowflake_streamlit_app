@@ -13,6 +13,7 @@ my_fruit_list.set_index('Fruit', inplace=True)
 fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon").json()
 
 
+
 # STREAMLIT STRUCTURE
 # Section 1
 streamlit.header('Breakfast Menu')
@@ -28,4 +29,5 @@ streamlit.dataframe(my_fruit_list.loc[selection])
 
 # Section 3
 streamlit.header('Fruityvice Fruit Advice')
-streamlit.dataframe(pd.read_json("https://fruityvice.com/api/fruit/watermelon"))
+streamlit.text(fruityvice_response)
+# streamlit.dataframe(pd.read_json("https://fruityvice.com/api/fruit/watermelon"))
