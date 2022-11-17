@@ -10,7 +10,7 @@ my_fruit_list = pandas.read_csv("https://uni-lab-files.s3.us-west-2.amazonaws.co
 my_fruit_list.set_index('Fruit', inplace=True)
 
 # Information about the fruit
-fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon")
+fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon").json()
 
 
 # STREAMLIT STRUCTURE
@@ -28,4 +28,4 @@ streamlit.dataframe(my_fruit_list.loc[selection])
 
 # Section 3
 streamlit.header('Fruityvice Fruit Advice')
-streamlit.dataframe(pd.DataFrame(fruityvice_response.json()))
+streamlit.dataframe(pd.read_json("https://fruityvice.com/api/fruit/watermelon"))
