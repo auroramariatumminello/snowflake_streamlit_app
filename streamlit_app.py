@@ -9,9 +9,6 @@ import requests
 my_fruit_list = pd.read_csv("https://uni-lab-files.s3.us-west-2.amazonaws.com/dabw/fruit_macros.txt")
 my_fruit_list.set_index('Fruit', inplace=True)
 
-# Information about the fruit
-fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon").json()
-fruityvice_advice = pd.DataFrame(fruityvice_response)
 
 
 # STREAMLIT STRUCTURE
@@ -30,6 +27,10 @@ streamlit.dataframe(my_fruit_list.loc[selection])
 
 # Section 3
 streamlit.header('Fruityvice Fruit Advice')
+fruit_selection = streamlit.multiselect("Choose your fruits", list(my_fruit_list.index), ['watermelon', 'banana'])
+
+# Information about the fruit
+fruityvice_response = [requests.get("https://fruityvice.com/api/fruit/").json() for fruit in fruit_selection]
+fruityvice_advice = pd.DataFrame.from_records(fruityvice_response)
 streamlit.dataframe(fruityvice_advice)
 
-# streamlit.dataframe(pd.read_json("https://fruityvice.com/api/fruit/watermelon"))
