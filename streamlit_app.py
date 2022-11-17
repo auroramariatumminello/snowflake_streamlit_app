@@ -1,6 +1,6 @@
 # LIBRARIES
 import streamlit
-import pandas
+import pandas as pd
 import requests
 
 
